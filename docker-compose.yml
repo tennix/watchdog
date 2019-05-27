@@ -1,0 +1,31 @@
+version: '2.1'
+
+services:
+  watchdog:
+    build:
+      context: ./
+    command:
+      - --port=9087
+      - --interval=30
+      - --timeout=3
+      - --max-retry=3
+      # - --kafka-addrs=
+      # - --kafka-topic=
+      # - --smtp-smarthost=
+      # - --smtp-auth-username=
+      # - --smtp-auth-password=
+      # - --smtp-from=
+      # - --smtp-to=
+  prometheus:
+    image: quay.io/prometheus/prometheus:v2.7.2
+    ports:
+    - 9090:9090
+    volumes:
+    - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    - ./rules.yml:/etc/prometheus/rules.yml:ro
+  alertmanager:
+    image: quay.io/prometheus/alertmanager:v0.16.1
+    ports:
+    - 9093:9093
+    volumes:
+    - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
