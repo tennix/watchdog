@@ -203,12 +203,14 @@ func (s Sender) Send(msg string) error {
 		)
 		writer, err := s.mailClient.Data()
 		if err != nil {
+			log.Printf("failed to issue DATA command: %v", err)
 			return err
 		}
 		defer writer.Close()
 
 		buf := bytes.NewBufferString(mailMsg)
 		if _, err := buf.WriteTo(writer); err != nil {
+			log.Printf("failed to write buffer: %v", err)
 			return err
 		}
 		log.Printf("Send alert mail %s to smtp server", mailMsg)
